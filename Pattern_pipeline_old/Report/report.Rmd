@@ -1,0 +1,718 @@
+---
+title: "Association between dependent measures and T-1000 self-reported"
+author: "Saeid Parvandeh"
+date: "Janaury 2017"
+output: html_document
+---
+
+
+In this report we investigate that why a narrative note has high or low dependent measure, how are they correlated to each other, and are they reasonable outcomes. Below, we provide several samples of the narrative notes with corresponding scores, and we examine them to see if they reflect a meaningful logical outcome. We specified the position of each score on the histogram plot. The histogram is based on all samples scores, and the distributional characteristics of them.
+
+Read csv self repoted file:
+
+```{r}
+rm(list=ls())
+measured_scores <- read.csv("E:/LIBR/Data/Measured_Scores.csv")
+self_reports <- read.csv("E:/LIBR/Data/CompleteT1000_2.csv")
+narratives <- read.csv("E:/LIBR/Data/T1000_LifechartNarratives_Scores.csv")
+common_ids <- intersect(as.vector(narratives[, 1]), as.vector(self_reports[, 1]))
+self_reports <- self_reports[which(self_reports[, 1]%in%common_ids), ]
+self_reports <- self_reports[order(self_reports$id), ]
+narratives <- narratives[which(narratives[, 1]%in%common_ids), ]
+measured_scores <- measured_scores[which(measured_scores[, 1]%in%common_ids), ]
+```
+
+Extract Mood/Anxiety and Healthy Control groups:
+
+```{r}
+SelfReport_M.A.H <- subset(self_reports, GroupAssignment=="Mood/Anxiety" | GroupAssignment=="Healthy Control")
+dim(SelfReport_M.A.H)
+Narratives_M.A.H <- narratives[which(SelfReport_M.A.H$id%in%narratives$id), ]
+MeasrdScore_M.A.H <- measured_scores[which(SelfReport_M.A.H$id%in%narratives$id), ]
+```
+Extract the maximum dependent measure scores and corresponding narrative notes
+to see if they have a meaningful logical outcome.
+
+1. Maximum subjectivity score in mood/anxiety and healthy control groups:
+
+```{r}
+max_sub.score_M.A.H <- max(MeasrdScore_M.A.H$sub_score)
+temp_M.A.H.1 <- MeasrdScore_M.A.H[which(MeasrdScore_M.A.H$sub_score == max_sub.score_M.A.H), ]
+print(temp_M.A.H.1)
+```
+
+```{r}
+Narr_max.sub <- Narratives_M.A.H[grep(rownames(temp_M.A.H.1), Narratives_M.A.H$id), 2]
+as.character(Narr_max.sub)
+```
+
+Distributional characteristics subjectivity scors:
+
+```{r}
+hist(MeasrdScore_M.A.H$sub_score)
+hist(MeasrdScore_M.A.H$sub_score, prob = T, main = "Distributional Characteristics of subjectivity scores(all)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A.H$sub_score), sd=sd(MeasrdScore_M.A.H$sub_score)), add = TRUE)
+abline(v = temp_M.A.H.1[3], col = "red", lwd = 2)
+```
+
+Distributional characteristics posivtive score
+
+```{r}
+hist(MeasrdScore_M.A.H$pos_score)
+hist(MeasrdScore_M.A.H$pos_score, prob = T, main = "Distributional Characteristics of positive Scores(all)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A.H$pos_score), sd=sd(MeasrdScore_M.A.H$pos_score)), add = TRUE)
+abline(v = temp_M.A.H.1[1], col = "red", lwd = 2)
+```
+
+Distributional characteristics negative score
+
+```{r}
+hist(MeasrdScore_M.A.H$neg_score)
+hist(MeasrdScore_M.A.H$neg_score, prob = T, main = "Distributional Characteristics of negative Scores(all)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A.H$neg_score), sd=sd(MeasrdScore_M.A.H$neg_score)), add = TRUE)
+abline(v = temp_M.A.H.1[2], col = "red", lwd = 2)
+```
+
+Distributional characteristics of the polarity scores
+
+```{r}
+pol_scores <- c(MeasrdScore_M.A.H$pos_score, MeasrdScore_M.A.H$neg_score)
+hist(pol_scores)
+hist(pol_scores, prob = T, main = "Distributional Characteristics of Polarity Scores(all)")
+curve(dnorm(x, mean=mean(pol_scores), sd=sd(pol_scores)), add = TRUE)
+abline(v = temp_M.A.H.1[1:2], col = c("blue", "green"), lwd = 2)
+```
+
+2. Maximum positive score in mood/anxiety and healthy control groups:
+
+```{r}
+max_pos.score_M.A.H <- max(MeasrdScore_M.A.H$pos_score)
+temp_M.A.H.2 <- MeasrdScore_M.A.H[which(MeasrdScore_M.A.H$pos_score == max_pos.score_M.A.H), ]
+print(temp_M.A.H.2)
+```
+
+```{r}
+Narr_max.pos <- Narratives_M.A.H[grep(rownames(temp_M.A.H.2), Narratives_M.A.H$id), 2]
+as.character(Narr_max.pos)
+```
+
+Position of subjectivity score associated with maximum positive score in the subjectivity score histogram
+
+```{r}
+hist(MeasrdScore_M.A.H$sub_score, prob = T, main = "Distributional Characteristics of subjectivity Scores(all)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A.H$sub_score), sd=sd(MeasrdScore_M.A.H$sub_score)), add = TRUE)
+abline(v = temp_M.A.H.2[3], col = "red", lwd = 2)
+```
+
+Position of positive score associated with maximum positive score in the posivtive score histogram
+
+```{r}
+hist(MeasrdScore_M.A.H$pos_score, prob = T, main = "Distributional Characteristics of positive Scores(all)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A.H$pos_score), sd=sd(MeasrdScore_M.A.H$pos_score)), add = TRUE)
+abline(v = temp_M.A.H.2[1], col = "red", lwd = 2)
+```
+
+Position of negative score associated with maximum positive score in the negative score histogram
+
+```{r}
+hist(MeasrdScore_M.A.H$neg_score, prob = T, main = "Distributional Characteristics of negative scores(all)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A.H$neg_score), sd=sd(MeasrdScore_M.A.H$neg_score)), add = TRUE)
+abline(v = temp_M.A.H.2[2], col = "red", lwd = 2)
+```
+
+Position of polarity scores associated with maximum positive score in the polarity scores histogram
+
+```{r}
+pol_scores <- c(MeasrdScore_M.A.H$pos_score, MeasrdScore_M.A.H$neg_score)
+hist(pol_scores, prob = T, main = "Distributional Characteristics of Polarity Scores(all)")
+curve(dnorm(x, mean=mean(pol_scores), sd=sd(pol_scores)), add = TRUE)
+abline(v = temp_M.A.H.2[1:2], col = c("blue", "green"), lwd = 2)
+```
+
+3. Maximum negative score in mood/anxiety and healthy control groups:
+
+```{r}
+max_neg.score_M.A.H <- min(MeasrdScore_M.A.H$neg_score)
+temp_M.A.H.3 <- MeasrdScore_M.A.H[which(MeasrdScore_M.A.H$neg_score == max_neg.score_M.A.H), ]
+print(temp_M.A.H.3)
+```
+
+```{r}
+Narr_max.neg <- Narratives_M.A.H[grep(rownames(temp_M.A.H.3), Narratives_M.A.H$id), 2]
+as.character(Narr_max.neg)
+```
+
+Position of subjectivity score associated with maximum negative score in the subjectivity scores histogram
+
+```{r}
+hist(MeasrdScore_M.A.H$sub_score, prob = T, main = "Distributional Characteristics of subjectivity Scores(all)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A.H$sub_score), sd=sd(MeasrdScore_M.A.H$sub_score)), add = TRUE)
+abline(v = temp_M.A.H.3[3], col = "red", lwd = 2)
+```
+
+Position of positive score associated with maximum negative score in the positive scores histogram
+
+```{r}
+hist(MeasrdScore_M.A.H$pos_score, prob = T, main = "Distributional Characteristics of positive Scores(all)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A.H$pos_score), sd=sd(MeasrdScore_M.A.H$pos_score)), add = TRUE)
+abline(v = temp_M.A.H.3[1], col = "red", lwd = 2)
+```
+
+Position of negative score associated with maximum negative score in the negative scores histogram
+
+```{r}
+hist(MeasrdScore_M.A.H$neg_score, prob = T, main = "Distributional Characteristics of negative Scores(all)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A.H$neg_score), sd=sd(MeasrdScore_M.A.H$neg_score)), add = TRUE)
+abline(v = temp_M.A.H.3[2], col = "red", lwd = 2)
+```
+
+Position of polarity scores associated with maximum negative score in the polarity scores histogram
+
+```{r}
+pol_scores <- c(MeasrdScore_M.A.H$pos_score, MeasrdScore_M.A.H$neg_score)
+hist(pol_scores, prob = T, main = "Distributional Characteristics of Polarity Scores(all)")
+curve(dnorm(x, mean=mean(pol_scores), sd=sd(pol_scores)), add = TRUE)
+abline(v = temp_M.A.H.3[1:2], col = c("blue", "green"), lwd = 2)
+```
+
+Extract Mood/Anxiety group:
+
+```{r}
+SelfReport_M.A <- subset(SelfReport_M.A.H, GroupAssignment=="Mood/Anxiety")
+dim(SelfReport_M.A)
+Narratives_M.A <- Narratives_M.A.H[which(SelfReport_M.A$id%in%narratives$id), ]
+MeasrdScore_M.A <- MeasrdScore_M.A.H[which(SelfReport_M.A$id%in%narratives$id), ]
+```
+
+4. Maximum subjectivity score in mood/anxiety group:
+
+```{r}
+max_sub.score_M.A <- max(MeasrdScore_M.A$sub_score)
+temp_M.A.1 <- MeasrdScore_M.A[which(MeasrdScore_M.A$sub_score == max_sub.score_M.A), ]
+print(temp_M.A.1)
+```
+
+```{r}
+Narr_max.sub <- Narratives_M.A[grep(rownames(temp_M.A.1), Narratives_M.A$id), 2]
+as.character(Narr_max.sub)
+```
+
+Distributional characteristics in the subjectivity score:
+
+```{r}
+hist(MeasrdScore_M.A$sub_score)
+hist(MeasrdScore_M.A$sub_score, prob = T, main = "Distributional Characteristics of subjectivity Scores(Mood/Anxiety)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A$sub_score), sd=sd(MeasrdScore_M.A$sub_score)), add = TRUE)
+abline(v = temp_M.A.1[3], col = "red", lwd = 2)
+```
+
+Distributional characteristics in the positive score
+
+```{r}
+hist(MeasrdScore_M.A$pos_score)
+hist(MeasrdScore_M.A$pos_score, prob = T, main = "Distributional Characteristics of positive scores(Mood/Anxiety)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A$pos_score), sd=sd(MeasrdScore_M.A$pos_score)), add = TRUE)
+abline(v = temp_M.A.1[1], col = "red", lwd = 2)
+```
+
+Distributional characteristics in the negative score
+
+```{r}
+hist(MeasrdScore_M.A$neg_score)
+hist(MeasrdScore_M.A$neg_score, prob = T, main = "Distributional Characteristics of negative scores(Mood/Anxiety)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A$neg_score), sd=sd(MeasrdScore_M.A$neg_score)), add = TRUE)
+abline(v = temp_M.A.1[2], col = "red", lwd = 2)
+```
+
+Distributional characteristics in the polarity scores
+
+```{r}
+pol_scores <- c(MeasrdScore_M.A$pos_score, MeasrdScore_M.A$neg_score)
+hist(pol_scores, prob = T, main = "Distributional Characteristics of Polarity Scores(Mood/Anxiety)")
+curve(dnorm(x, mean=mean(pol_scores), sd=sd(pol_scores)), add = TRUE)
+abline(v = temp_M.A.1[1:2], col = c("blue", "green"), lwd = 2)
+```
+
+5. Maximum positive score in mood/anxiety group:
+
+```{r}
+max_pos.score_M.A <- max(MeasrdScore_M.A$pos_score)
+temp_M.A.2 <- MeasrdScore_M.A[which(MeasrdScore_M.A$pos_score == max_pos.score_M.A), ]
+print(temp_M.A.2)
+```
+
+```{r}
+Narr_max.pos <- Narratives_M.A[grep(rownames(temp_M.A.2), Narratives_M.A$id), 2]
+as.character(Narr_max.pos)
+```
+
+Position of subjectivity score associated with maximum positive score in the subjectivity score histogram
+
+```{r}
+hist(MeasrdScore_M.A$sub_score, prob = T, main = "Distributional Characteristics of subjectivity Scores(Mood/Anxiety)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A$sub_score), sd=sd(MeasrdScore_M.A$sub_score)), add = TRUE)
+abline(v = temp_M.A.2[3], col = "red", lwd = 2)
+```
+
+Position of positive score associated with maximum positive score in the positive scores histogram
+
+```{r}
+hist(MeasrdScore_M.A$pos_score, prob = T, main = "Distributional Characteristics of positive scores(Mood/Anxiety)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A$pos_score), sd=sd(MeasrdScore_M.A$pos_score)), add = TRUE)
+abline(v = temp_M.A.2[1], col = "red", lwd = 2)
+```
+
+Position of negative score associated with maximum positive score in the negative scores histogram
+
+```{r}
+hist(MeasrdScore_M.A$neg_score, prob = T, main = "Distributional Characteristics of negative scores(Mood/Anxiety)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A$neg_score), sd=sd(MeasrdScore_M.A$neg_score)), add = TRUE)
+abline(v = temp_M.A.2[2], col = "red", lwd = 2)
+```
+
+Position of polarity scores associated with maximum positive score in the polarity scores histogram
+
+```{r}
+pol_scores <- c(MeasrdScore_M.A$pos_score, MeasrdScore_M.A$neg_score)
+hist(pol_scores, prob = T, main = "Distributional Characteristics of Polarity Scores(Mood/Anxiety)")
+curve(dnorm(x, mean=mean(pol_scores), sd=sd(pol_scores)), add = TRUE)
+abline(v = temp_M.A.2[1:2], col = c("blue", "green"), lwd = 2)
+```
+
+6. Maximum negative score in mood/anxiety group:
+
+```{r}
+max_neg.score_M.A <- min(MeasrdScore_M.A$neg_score)
+temp_M.A.3 <- MeasrdScore_M.A[which(MeasrdScore_M.A$neg_score == max_neg.score_M.A), ]
+print(temp_M.A.3)
+```
+
+```{r}
+Narr_max.neg <- Narratives_M.A[grep(rownames(temp_M.A.3), Narratives_M.A$id), 2]
+as.character(Narr_max.neg)
+```
+
+Position of subjectivity score associated with maximum negative score in the subjectivity scores histogram
+
+```{r}
+hist(MeasrdScore_M.A$sub_score, prob = T, main = "Distributional Characteristics of subjectivity Scores(Mood/Anxiety)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A$sub_score), sd=sd(MeasrdScore_M.A$sub_score)), add = TRUE)
+abline(v = temp_M.A.3[3], col = "red", lwd = 2)
+```
+
+Position of positive score associated with maximum negative score in the positive scores histogram
+
+```{r}
+hist(MeasrdScore_M.A$pos_score, prob = T, main = "Distributional Characteristics of positive scores(Mood/Anxiety)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A$pos_score), sd=sd(MeasrdScore_M.A$pos_score)), add = TRUE)
+abline(v = temp_M.A.3[1], col = "red", lwd = 2)
+```
+
+Position of negative score associated with maximum negative score in the negative scores histogram
+
+```{r}
+hist(MeasrdScore_M.A$neg_score, prob = T, main = "Distributional Characteristics of negative scores(Mood/Anxiety)")
+curve(dnorm(x, mean=mean(MeasrdScore_M.A$neg_score), sd=sd(MeasrdScore_M.A$neg_score)), add = TRUE)
+abline(v = temp_M.A.3[2], col = "red", lwd = 2)
+```
+
+Position of polarity scores associated with maximum negative score in the polarity scores histogram
+
+```{r}
+pol_scores <- c(MeasrdScore_M.A$pos_score, MeasrdScore_M.A$neg_score)
+hist(pol_scores, prob = T, main = "Distributional Characteristics of Polarity Scores(Mood/Anxiety)")
+curve(dnorm(x, mean=mean(pol_scores), sd=sd(pol_scores)), add = TRUE)
+abline(v = temp_M.A.3[1:2], col = c("blue", "green"), lwd = 2)
+```
+
+Extract Healthy Control group:
+
+```{r}
+SelfReport_H <- subset(SelfReport_M.A.H, GroupAssignment=="Healthy Control")
+dim(SelfReport_H)
+Narratives_H <-  Narratives_M.A.H[which(SelfReport_H$id%in%narratives$id), ]
+MeasrdScore_H <- MeasrdScore_M.A.H[which(SelfReport_H$id%in%narratives$id), , drop = F]
+```
+
+7. Maximum subjectivity score in healthy control group:
+
+```{r}
+max_sub.score_H <- max(MeasrdScore_H$sub_score)
+temp_H.1 <- MeasrdScore_H[which(MeasrdScore_H$sub_score == max_sub.score_H), ]
+print(temp_H.1)
+```
+
+```{r}
+Narr_max.sub <- Narratives_H[grep(rownames(temp_H.1), Narratives_H$id), 2]
+as.character(Narr_max.sub)
+```
+
+Distributional characteristics in the subjectivity score
+
+```{r}
+hist(MeasrdScore_H$sub_score, prob = T, main = "Distributional Characteristics of subjectivity Scores(Healthy)")
+curve(dnorm(x, mean=mean(MeasrdScore_H$sub_score), sd=sd(MeasrdScore_H$sub_score)), add = TRUE)
+abline(v = temp_H.1[3], col = "red", lwd = 2)
+```
+
+Distributional characteristics of the positive score
+
+```{r}
+hist(MeasrdScore_H$pos_score)
+hist(MeasrdScore_H$pos_score, prob = T, main = "Distributional Characteristics of positive scores(Healthy)")
+curve(dnorm(x, mean=mean(MeasrdScore_H$pos_score), sd=sd(MeasrdScore_H$pos_score)), add = TRUE)
+abline(v = temp_H.1[1], col = "red", lwd = 2)
+```
+
+Distributional characteristics of the negative score
+
+```{r}
+hist(MeasrdScore_H$neg_score)
+hist(MeasrdScore_H$neg_score, prob = T, main = "Distributional Characteristics of negative scores(Healthy)")
+curve(dnorm(x, mean=mean(MeasrdScore_H$neg_score), sd=sd(MeasrdScore_H$neg_score)), add = TRUE)
+abline(v = temp_H.1[2], col = "red", lwd = 2)
+```
+ 
+Distributional characteristics of the polarity scores
+
+```{r}
+pol_scores <- c(MeasrdScore_H$pos_score, MeasrdScore_H$neg_score)
+hist(pol_scores, prob = T, main = "Distributional Characteristics of Polarity Scores(Healthy)")
+curve(dnorm(x, mean=mean(pol_scores), sd=sd(pol_scores)), add = TRUE)
+abline(v = temp_H.1[1:2], col = c("blue", "green"), lwd = 2)
+```
+
+8. Maximum positive score in healthy control group:
+
+```{r}
+max_pos.score_H <- max(MeasrdScore_H$pos_score)
+temp_H.2 <- MeasrdScore_H[which(MeasrdScore_H$pos_score == max_pos.score_H), ]
+print(temp_H.2)
+```
+
+```{r}
+Narr_max.pos <- Narratives_H[grep(rownames(temp_H.2), Narratives_H$id), 2]
+as.character(Narr_max.pos)
+```
+
+Position of subjectivity score associated with maximum positive score in the subjectivity scores histogram
+
+```{r}
+hist(MeasrdScore_H$sub_score, prob = T, main = "Distributional Characteristics of subjectivity Scores(Healthy)")
+curve(dnorm(x, mean=mean(MeasrdScore_H$sub_score), sd=sd(MeasrdScore_H$sub_score)), add = TRUE)
+abline(v = temp_H.2[3], col = "red", lwd = 2)
+```
+
+Position of positive score associated with maximum positive score in the positive scores histogram
+
+```{r}
+hist(MeasrdScore_H$pos_score, prob = T, main = "Distributional Characteristics of positive scores(Healthy)")
+curve(dnorm(x, mean=mean(MeasrdScore_H$pos_score), sd=sd(MeasrdScore_H$pos_score)), add = TRUE)
+abline(v = temp_H.2[1], col = "red", lwd = 2)
+```
+
+Position of negative score associated with maximum positive score in the negative scores histogram
+
+```{r}
+hist(MeasrdScore_H$neg_score, prob = T, main = "Distributional Characteristics of negative scores(Healthy)")
+curve(dnorm(x, mean=mean(MeasrdScore_H$neg_score), sd=sd(MeasrdScore_H$neg_score)), add = TRUE)
+abline(v = temp_H.2[2], col = "red", lwd = 2)
+```
+
+Position of polarity scores associated with maximum positive score in the polarity scores histogram
+
+```{r}
+pol_scores <- c(MeasrdScore_H$pos_score, MeasrdScore_H$neg_score)
+hist(pol_scores, prob = T, main = "Distributional Characteristics of Polarity Scores(Healthy)")
+curve(dnorm(x, mean=mean(pol_scores), sd=sd(pol_scores)), add = TRUE)
+abline(v = temp_H.2[1:2], col = c("blue", "green"), lwd = 2)
+```
+
+9. Maximum negative score in healthy control groups:
+
+```{r}
+max_neg.score_H <- min(MeasrdScore_H$neg_score)
+temp_H.3 <- MeasrdScore_H[which(MeasrdScore_H$neg_score == max_neg.score_H), ]
+print(temp_H.3)
+```
+
+```{r}
+Narr_max.neg <- Narratives_H[grep(rownames(temp_H.3), Narratives_H$id), 2]
+as.character(Narr_max.neg)
+```
+
+Position of subjectivity score associated with maximum negative score in the subjectivity scores histogram
+
+```{r}
+hist(MeasrdScore_H$sub_score, prob = T, main = "Distributional Characteristics of subjectivity Scores(Healthy)")
+curve(dnorm(x, mean=mean(MeasrdScore_H$sub_score), sd=sd(MeasrdScore_H$sub_score)), add = TRUE)
+abline(v = temp_H.3[3], col = "red", lwd = 2)
+```
+
+Position of positive score associated with maximum negative score in the positive scores histogram
+
+```{r}
+hist(MeasrdScore_H$pos_score, prob = T, main = "Distributional Characteristics of positive scores(Healthy)")
+curve(dnorm(x, mean=mean(MeasrdScore_H$pos_score), sd=sd(MeasrdScore_H$pos_score)), add = TRUE)
+abline(v = temp_H.3[1], col = "red", lwd = 2)
+```
+
+Position of negative score associated with maximum negative score in the negative scores histogram
+
+```{r}
+hist(MeasrdScore_H$neg_score, prob = T, main = "Distributional Characteristics of negative scores(Healthy)")
+curve(dnorm(x, mean=mean(MeasrdScore_H$neg_score), sd=sd(MeasrdScore_H$neg_score)), add = TRUE)
+abline(v = temp_H.3[2], col = "red", lwd = 2)
+```
+
+Position of polarity scores associated with maximum negative score in the polarity scores histogram
+
+```{r}
+pol_scores <- c(MeasrdScore_H$pos_score, MeasrdScore_H$neg_score)
+hist(pol_scores, prob = T, main = "Distributional Characteristics of Polarity Scores(Healthy)")
+curve(dnorm(x, mean=mean(pol_scores), sd=sd(pol_scores)), add = TRUE)
+abline(v = temp_H.3[1:2], col = c("blue", "green"), lwd = 2)
+```
+
+Correlation between each group separately and together:
+
+Mood/Anxiety and Healthy control groups together
+
+```{r}
+library(psych)
+pairs.panels(MeasrdScore_M.A.H[1:3])
+```
+
+Mood/Anxiety group:
+
+```{r}
+pairs.panels(MeasrdScore_M.A[1:3])
+```
+
+Healthy control group:
+
+```{r}
+pairs.panels(MeasrdScore_H[1:3])
+```
+
+linear relationship between dependent measured scores and symptom based self-reports (PHQ, PANASX_NegAffect, Interviewer) 
+```{r}
+summary(lm(MeasrdScore_H$sub_score ~ SelfReport_H$PHQ))
+summary(lm(MeasrdScore_H$pos_score ~ SelfReport_H$PHQ))
+summary(lm(MeasrdScore_H$neg_score ~ SelfReport_H$PHQ))
+summary(lm(MeasrdScore_M.A$sub_score ~ SelfReport_M.A$PHQ))
+summary(lm(MeasrdScore_M.A$pos_score ~ SelfReport_M.A$PHQ))
+summary(lm(MeasrdScore_M.A$neg_score ~ SelfReport_M.A$PHQ))
+summary(lm(MeasrdScore_M.A.H$sub_score ~ SelfReport_M.A.H$PHQ))
+summary(lm(MeasrdScore_M.A.H$pos_score ~ SelfReport_M.A.H$PHQ))
+summary(lm(MeasrdScore_M.A.H$neg_score ~ SelfReport_M.A.H$PHQ))
+
+summary(lm(MeasrdScore_H$sub_score ~ SelfReport_H$PANASX_NegAffect))
+summary(lm(MeasrdScore_H$pos_score ~ SelfReport_H$PANASX_NegAffect))
+summary(lm(MeasrdScore_H$neg_score ~ SelfReport_H$PANASX_NegAffect))
+summary(lm(MeasrdScore_M.A$sub_score ~ SelfReport_M.A$PANASX_NegAffect))
+summary(lm(MeasrdScore_M.A$pos_score ~ SelfReport_M.A$PANASX_NegAffect))
+summary(lm(MeasrdScore_M.A$neg_score ~ SelfReport_M.A$PANASX_NegAffect))
+summary(lm(MeasrdScore_M.A.H$sub_score ~ SelfReport_M.A.H$PANASX_NegAffect))
+summary(lm(MeasrdScore_M.A.H$pos_score ~ SelfReport_M.A.H$PANASX_NegAffect))
+summary(lm(MeasrdScore_M.A.H$neg_score ~ SelfReport_M.A.H$PANASX_NegAffect))
+
+summary(lm(MeasrdScore_H$sub_score ~ as.numeric(Narratives_H$LC_conducted_by)))
+summary(lm(MeasrdScore_H$pos_score ~ as.numeric(Narratives_H$LC_conducted_by)))
+summary(lm(MeasrdScore_H$neg_score ~ as.numeric(Narratives_H$LC_conducted_by)))
+summary(lm(MeasrdScore_M.A$sub_score ~ as.numeric(Narratives_M.A$LC_conducted_by)))
+summary(lm(MeasrdScore_M.A$pos_score ~ as.numeric(Narratives_M.A$LC_conducted_by)))
+summary(lm(MeasrdScore_M.A$neg_score ~ as.numeric(Narratives_M.A$LC_conducted_by)))
+summary(lm(MeasrdScore_M.A.H$sub_score ~ as.numeric(Narratives_M.A.H$LC_conducted_by)))
+summary(lm(MeasrdScore_M.A.H$pos_score ~ as.numeric(Narratives_M.A.H$LC_conducted_by)))
+summary(lm(MeasrdScore_M.A.H$neg_score ~ as.numeric(Narratives_M.A.H$LC_conducted_by)))
+```
+
+Extract PANAS-X, BFI, Symptom scales (PHQ-9, OASIS), PROMIS (anxiety, depression, anger)
+
+```{r}
+SelfReport_M.A.H_PANASX <- SelfReport_M.A.H[ ,grepl("PANASX", names(SelfReport_M.A.H))]
+SelfReport_M.A.H_BFI <- SelfReport_M.A.H[ ,grepl("BFI", names(SelfReport_M.A.H))]
+SelfReport_M.A.H_PHQ <- SelfReport_M.A.H$PHQ
+SelfReport_M.A.H_OASIS <- SelfReport_M.A.H$OASIS
+SelfReport_M.A.H_PROMIS.Anger <- SelfReport_M.A.H[ ,grepl("PROMIS_Anger", names(SelfReport_M.A.H))]
+SelfReport_M.A.H_PROMIS.Depress <- SelfReport_M.A.H[ , grepl("PROMIS_Depress", names(SelfReport_M.A.H))]
+SelfReport_M.A.H_PROMIS_Anxiety <- SelfReport_M.A.H[ , grepl("PROMIS_Anxiety", names(SelfReport_M.A.H))]
+SelfReport_M.A.H_g1 <- cbind(SelfReport_M.A.H_PANASX, SelfReport_M.A.H_BFI, SelfReport_M.A.H_PHQ, SelfReport_M.A.H_OASIS, 
+                           SelfReport_M.A.H_PROMIS.Anger, SelfReport_M.A.H_PROMIS.Depress, SelfReport_M.A.H_PROMIS_Anxiety)
+Narratives_M.A.H_LC <- as.numeric(Narratives_M.A.H$LC_conducted_by)
+```
+
+Effect of dependent measures on PANAS-X, BFI, Symptom scales (PHQ-9, OASIS), PROMIS (anxiety, depression, anger)
+
+```{r}
+summary(lm(MeasrdScore_M.A.H$sub_score ~ .,SelfReport_M.A.H_g1))
+summary(lm(MeasrdScore_M.A.H$pos_score ~ .,SelfReport_M.A.H_g1))
+summary(lm(MeasrdScore_M.A.H$neg_score ~ .,SelfReport_M.A.H_g1))
+```
+
+Extract age, gender, BMI, socioeconomic status, and education
+
+```{r}
+age    <- SelfReport_M.A.H[, grep("Age", names(SelfReport_M.A.H), fixed = T)]
+gender <- SelfReport_M.A.H[, grep("Gender", names(SelfReport_M.A.H), fixed = T)]
+BMI    <- SelfReport_M.A.H[, grep("BMI", names(SelfReport_M.A.H), fixed = T)]
+edu    <- factor(SelfReport_M.A.H[, grep("Education", names(SelfReport_M.A.H), fixed = T)])
+income <- SelfReport_M.A.H[, grep("Income", names(SelfReport_M.A.H), fixed = T)]
+SelfReport_M.A.H_demo <- data.frame(cbind(age, gender, BMI, edu, income))
+```
+
+Logistic regression to find the effects of age, gender, BMI, socioeconomic status, and education as confounders in the populations.
+
+```{r}
+Good.reps <- with(SelfReport_M.A.H, ifelse(GroupAssignment=="Healthy Control", 1, 0))
+glm.model_1 <- glm(Good.reps ~ age+gender+BMI+edu+income, data = SelfReport_M.A.H_demo, family = "binomial")
+summary(glm.model_1)
+```
+
+Extract CTQ and TES
+
+```{r}
+SelfReport_M.A.H_CTQ <- SelfReport_M.A.H[ ,grepl("CTQ", names(SelfReport_M.A.H))]
+SelfReport_M.A.H_TES <- SelfReport_M.A.H[ ,grepl("TES", names(SelfReport_M.A.H))]
+SelfReport_M.A.H_med <- data.frame(cbind(SelfReport_M.A.H_CTQ, SelfReport_M.A.H_TES))
+```
+
+Test the mediating factors (CTQ, TEC) influences to dependent measured scores
+
+```{r}
+glm.model_2 <- glm(MeasrdScore_M.A.H$sub_score ~.,data = SelfReport_M.A.H_med, family = "gaussian")
+summary(glm.model_2)
+glm.model_2 <- glm(MeasrdScore_M.A.H$pos_score ~.,data = SelfReport_M.A.H_med, family = "gaussian")
+summary(glm.model_2)
+glm.model_2 <- glm(MeasrdScore_M.A.H$neg_score ~.,data = SelfReport_M.A.H_med, family = "gaussian")
+summary(glm.model_2)
+```
+
+Extract all symptoms drops columns that contain text 
+
+```{r}
+SelfReport_M.A.H_MINI <- SelfReport_M.A.H[ ,grepl("MINI", names(SelfReport_M.A.H))]
+SelfReport_M.A.H_SNAQ <- SelfReport_M.A.H[ ,grepl("SNAQ", names(SelfReport_M.A.H))]
+drops <- cbind(SelfReport_M.A.H_MINI, SelfReport_M.A.H_SNAQ)
+SelfReport_M.A.H_v2 <- data.frame(data.matrix(SelfReport_M.A.H[, !(names(SelfReport_M.A.H) %in% names(drops))]))
+```
+
+Examine a multivariable model with inclusion of all symptoms
+
+```{r}
+mosthighlycorrelated <- function(mydataframe,numtoreport)
+{
+  # find the correlations
+  cormatrix <- cor(mydataframe)
+  # set the correlations on the diagonal or lower triangle to zero,
+  # so they will not be reported as the highest ones:
+  diag(cormatrix) <- 0
+  cormatrix[lower.tri(cormatrix)] <- 0
+  # flatten the matrix into a dataframe for easy sorting
+  fm <- as.data.frame(as.table(cormatrix))
+  # assign human-friendly names
+  names(fm) <- c("First.Variable", "Second.Variable","Correlation")
+  # sort and print the top n correlations
+  head(fm[order(abs(fm$Correlation),decreasing=T),],n=numtoreport)
+}
+mosthighlycorrelated(SelfReport_M.A.H_v2, 20)
+```
+
+mean and standard deviation of all symptoms
+
+```{r}
+data.frame(sapply(SelfReport_M.A.H_v2, mean))
+data.frame(sapply(SelfReport_M.A.H_v2, sd))
+```
+
+Description of the narrative notes:
+
+```{r}
+interviewers <- unique(Narratives_M.A.H$LC_conducted_by)
+print(as.character(interviewers))
+n_words_1 <- MeasrdScore_M.A.H[which(Narratives_M.A.H$LC_conducted_by == interviewers[1]), 5]
+length(n_words_1)
+hist(n_words_1, main = interviewers[1])
+n_words_2 <- MeasrdScore_M.A.H[which(Narratives_M.A.H$LC_conducted_by == interviewers[2]), 5]
+length(n_words_2)
+hist(n_words_2, main = interviewers[2])
+n_words_3 <- MeasrdScore_M.A.H[which(Narratives_M.A.H$LC_conducted_by == interviewers[3]), 5]
+length(n_words_3)
+hist(n_words_3, main = interviewers[3])
+n_words_4 <- MeasrdScore_M.A.H[which(Narratives_M.A.H$LC_conducted_by == interviewers[4]), 5]
+length(n_words_4)
+hist(n_words_4, main = interviewers[4])
+n_words_5 <- MeasrdScore_M.A.H[which(Narratives_M.A.H$LC_conducted_by == interviewers[5]), 5]
+length(n_words_5)
+hist(n_words_5, main = interviewers[5])
+n_words_6 <- MeasrdScore_M.A.H[which(Narratives_M.A.H$LC_conducted_by == interviewers[6]), 5]
+length(n_words_6)
+hist(n_words_6, main = interviewers[6])
+n_words_7 <- MeasrdScore_M.A.H[which(Narratives_M.A.H$LC_conducted_by == interviewers[7]), 5]
+length(n_words_7)
+hist(n_words_7, main = interviewers[7])
+n_words_8 <- MeasrdScore_M.A.H[which(Narratives_M.A.H$LC_conducted_by == interviewers[8]), 5]
+length(n_words_8)
+hist(n_words_8, main = interviewers[8])
+n_words_9 <- MeasrdScore_M.A.H[which(Narratives_M.A.H$LC_conducted_by == interviewers[9]), 5]
+length(n_words_9)
+hist(n_words_9, main = interviewers[9])
+```
+
+mood/anxiety group
+
+```{r}
+n_words_1 <- MeasrdScore_M.A[which(Narratives_M.A$LC_conducted_by == interviewers[1]), 5]
+length(n_words_1)
+hist(n_words_1, main = interviewers[1])
+n_words_2 <- MeasrdScore_M.A[which(Narratives_M.A$LC_conducted_by == interviewers[2]), 5]
+length(n_words_2)
+hist(n_words_2, main = interviewers[2])
+n_words_3 <- MeasrdScore_M.A[which(Narratives_M.A$LC_conducted_by == interviewers[3]), 5]
+length(n_words_3)
+hist(n_words_3, main = interviewers[3])
+n_words_4 <- MeasrdScore_M.A[which(Narratives_M.A$LC_conducted_by == interviewers[4]), 5]
+length(n_words_4)
+hist(n_words_4, main = interviewers[4])
+n_words_5 <- MeasrdScore_M.A[which(Narratives_M.A$LC_conducted_by == interviewers[5]), 5]
+length(n_words_5)
+hist(n_words_5, main = interviewers[5])
+n_words_6 <- MeasrdScore_M.A[which(Narratives_M.A$LC_conducted_by == interviewers[6]), 5]
+length(n_words_6)
+hist(n_words_6, main = interviewers[6])
+n_words_7 <- MeasrdScore_M.A[which(Narratives_M.A$LC_conducted_by == interviewers[7]), 5]
+length(n_words_7)
+hist(n_words_7, main = interviewers[7])
+n_words_8 <- MeasrdScore_M.A[which(Narratives_M.A$LC_conducted_by == interviewers[8]), 5]
+length(n_words_8)
+hist(n_words_8, main = interviewers[8])
+n_words_9 <- MeasrdScore_M.A[which(Narratives_M.A$LC_conducted_by == interviewers[9]), 5]
+length(n_words_9)
+hist(n_words_9, main = interviewers[9])
+```
+
+Healthy control group
+
+```{r}
+n_words_1 <- MeasrdScore_H[which(Narratives_H$LC_conducted_by == interviewers[1]), 5]
+length(n_words_1)
+hist(n_words_1, main = interviewers[1])
+n_words_2 <- MeasrdScore_H[which(Narratives_H$LC_conducted_by == interviewers[2]), 5]
+length(n_words_2)
+hist(n_words_2, main = interviewers[2])
+n_words_3 <- MeasrdScore_H[which(Narratives_H$LC_conducted_by == interviewers[3]), 5]
+length(n_words_3)
+hist(n_words_3, main = interviewers[3])
+n_words_4 <- MeasrdScore_M.A[which(Narratives_H$LC_conducted_by == interviewers[4]), 5]
+length(n_words_4)
+hist(n_words_4, main = interviewers[4])
+n_words_5 <- MeasrdScore_H[which(Narratives_H$LC_conducted_by == interviewers[5]), 5]
+length(n_words_5)
+hist(n_words_5, main = interviewers[5])
+n_words_6 <- MeasrdScore_H[which(Narratives_H$LC_conducted_by == interviewers[6]), 5]
+length(n_words_6)
+hist(n_words_6, main = interviewers[6])
+```
+
+End of the report.

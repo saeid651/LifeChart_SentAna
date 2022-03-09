@@ -1,0 +1,45 @@
+Martin: 
+X1. critical point is how to normalize the scores
+X2. focus on mood and anxiety group
+X3. create box plot for the interviewers
+X4. correlation between average scores
+X5. use log transformation in income
+
+
+Hamed:
+1. remove all or the repeated words in each list of the scores.
+2. severity of disorders between interviewers (PHQ, OASIS) if patients are same, are the notes same lenghth
+3. concatenate all the valenced words, and find the frequency of each word
+ 
+Trang:
+X1. add p-values to the plots.
+
+main variables:
+1. total words
+2. total positive valenced words
+3. total negative valenced words
+4. total adjective words
+5. average subjectivity score
+6. average negative score
+7. average positve score
+
+Comment of meeting:
+1. present the data first, how many subjects do we have totally? and how is the distributions in MA, HC, and others?
+2. extend the report and include any software or packages that you used step-by-step so that anyone can read the 
+report and understand what's going on there.
+3. excel file: valence words, freq, score-three different groups, ma, hc, and substances use.
+4. or, total words in narrative notes: freq adjusted by freq *100, valence words, subjectivity--three different groups.
+
+Meeting 7/4/2017:
+1. try to find only adjective words, because they are the most important words in the text.
+
+
+
+
+
+
+
+
+
+
+

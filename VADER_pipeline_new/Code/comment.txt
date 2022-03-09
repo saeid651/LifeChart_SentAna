@@ -1,0 +1,4 @@
+1. figure out how the scores are computed. what is compound score? what is neutral score?
+2. do anova on interviewers and put at the top of report.
+3. Try to present as fluent as possible, you should know what quesitons audiance are going to ask and be prepared to
+respond.

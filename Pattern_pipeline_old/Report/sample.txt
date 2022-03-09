@@ -1,0 +1,58 @@
+A sample narrative note:
+
+2nd to oldest of four girls born to her parents; raised by her mother and father. 
+Father was a pastor to a non-denominational church (belief system similar to the Pentecostal church). 
+Starting in subject's early years, she was very quiet and shy in school- had friendships and
+ was involved in and accomplished in extracurricular activities just was uncomfortable with extroverted kids, 
+was afraid of conflict. Was academically achieved in all of her schooling. 
+(High School years) Subject started to branch out from the belief system that her father had been teaching-subject 
+went to school counselor to talk to someone about her inner conflict of wanting to please her father but 
+wanting to think and act for herself more. (Age 18) 1st depressive episode- followed a break-up with her boyfriend, 
+was indifferent towards people and activities that she once enjoyed, was fatigued and tearful all the time. 
+Period lasted a little over a month. (Age 20) Worst depressive episode- subject was having a rocky relationship with 
+her on/off boyfriend. She dropped out of track (which she had loved doing since the age of 6), 
+stopped taking care of herself, had SI with plan but no intent. Subject went to a school counselor for one visit 
+to discuss her helpless feelings but dropped out of school shortly after semester completed and started working. 
+Currently has difficulty concentrating, puts herself down often but does not feel worthless, hopeless or helpless. 
+Lack of confidence in herself and her focus issues make her anxious in how she is performing her job, 
+worries often about her romantic relationship. Subject hates conflict of any kind with others and 
+will avoid communicating her needs to "keep the peace" with co-workers and family.
+
+Subjectivity Score: 6.0
+Adjective Words and their score: 
+['nondenominational', 0.0, 
+'similar', 0.4, 
+'early', 0.3, 
+'quiet', 0.3333333333333333, 
+'extracurricular', 0.0, 
+'uncomfortable', 1.0, 
+'extroverted', 0.0, 
+'afraid', 0.9, 
+'teachingsubject', 0.0, 
+'inner', 0.16666666666666666, 
+'1st', 0.0, 
+'depressive', 0.0, 
+'indifferent', 0.0, 
+'little', 0.5, 
+'depressive', 0.0, 
+'rocky', 0.0, 
+'onoff', 0.0, 
+'helpless', 0.0, 
+'feel', 0.0, 
+'worthless', 0.9, 
+'hopeless', 0.0, 
+'helpless', 0.0, 
+'anxious', 1.0, 
+'romantic', 0.5]
+
+Positive Score: 0.1 
+Words with positive valence and their score: 
+['early', 0.1]
+
+Negative Score: -2.3375 
+Words with negative valence and their score: 
+['uncomfortable', -0.5, 
+'afraid', -0.6, 
+'little', -0.1875, 
+'worthless', -0.8, 
+'anxious', -0.25]
